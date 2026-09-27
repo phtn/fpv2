@@ -1,0 +1,20 @@
+setup
+  const rows = [
+    { words: ['Specimen', 'Glyph', 'Kerning', 'Ligature'], motion: 'animate-[studio-marquee_32s_linear_infinite]', outline: false },
+    { words: ['Italic', 'Swash', 'Counter', 'Serif'], motion: 'animate-[studio-marquee_16s_linear_infinite_reverse]', outline: true },
+    // { words: ['Display', 'Ink trap', 'Terminal', 'Spur'], motion: 'animate-[studio-marquee_16s_linear_infinite]', outline: false }
+  ];
+
+section.highway#highway(data-section='highway' className='py-16 overflow-hidden sm:py-24 border-y opacity-50' aria-labelledby="highway")
+  div(aria-hidden='true' className='grid gap-8 select-none')
+    each row, rowIndex in rows key rowIndex
+      div(className={'flex w-max motion-reduce:animate-none ' + row.motion})
+        each word, index in [...row.words, ...row.words] key index
+          span(className={'px-5 font-black tracking-[-0.05em] leading-[0.95] text-[clamp(1.5rem,14vw,3rem)] whitespace-nowrap ' + (row.outline ? '[-webkit-text-fill-color:transparent] italic [-webkit-text-stroke:1.5px_currentColor]' : index % 2 ? 'text-current/20 text-[clamp(1.5rem,14vw,3rem)]' : '')}) #{word}
+  div(className='hidden _flex flex-col items-start px-4 mx-auto mt-14 gap-8 max-w-5xl sm:flex-row sm:items-end sm:justify-between')
+    div(className='max-w-md')
+      p(className='text-xs tracking-widest uppercase font-mono text-[var(--studio-accent)]') Foundry Ø — 14 families, 212 styles
+      h1(className='mt-3 text-2xl font-medium leading-snug text-balance sm:text-3xl') Typefaces with a pulse, drawn for screens that never sit still.
+    a(role='link' aria-disabled='true' className='inline-flex items-center shrink-0 px-6 py-3 gap-3 rounded-full border text-sm font-medium group border-current transition-all hover:gap-5 hover:bg-current/10')
+      span Browse the library
+      span(aria-hidden='true') →H

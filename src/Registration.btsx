@@ -1,0 +1,84 @@
+import { panels } from './App.btsx'
+import type { PanelId } from './App.btsx'
+module
+  export interface RegistrationProps {
+    activeId: PanelId
+    selectPanel: (id: PanelId) => void
+    onTabKey: (event: KeyboardEvent, index: number) => void
+    active: { id: 'language'; label: 'Language'; number: '01'; title: 'Less syntax. More intent.'; description: 'A little structure goes a long way. Write typed components with indentation, native control flow, and the full expression of TypeScript.'; tags: ['BTSX', 'TypeScript', 'Native control flow']; path: '/docs/language'; note: 'src/App.btsx'; code: 'import { useState } from "octane"\n\nsetup const [count, setCount] = useState(0);\n\nbutton(onClick={() => setCount(count + 1)})\n  | Launch #{count}' } | { id: 'integration'; label: 'Integration'; number: '02'; title: 'One seamless pipeline.'; description: 'Beast turns your components into TSRX. Octane brings them to life. Choose Vite, Rspack, or Rsbuild and stay in your flow.'; tags: ['Vite', 'Rspack', 'Rsbuild']; path: '/docs/vite'; note: 'Your first edit'; code: '01  Open src/App.btsx\n02  Make it yours\n03  Save. See it live.\n\nBTSX → TSRX → Octane\n\nReady for your next idea.' } | { id: 'skills'; label: 'Skills'; number: '03'; title: 'Build with a co-pilot.'; description: 'Give your coding agent a shared language. Scaffold, create, and refine with the Beast skill, or bring an existing React experience along.'; tags: ['Scaffold', 'Create', 'Migrate']; path: '/docs/skills'; note: 'Add the Beast skill'; code: 'npx skills add https://github.com/phtn/beast-skill --skill beast' }
+    docsUrl: string
+    copyNote: (note: string) => Promise<void>
+    copyStatus: string
+  }
+module
+  interface WorkflowPanelProps {
+    activeId: PanelId
+    active: { id: 'language'; label: 'Language'; number: '01'; title: 'Less syntax. More intent.'; description: 'A little structure goes a long way. Write typed components with indentation, native control flow, and the full expression of TypeScript.'; tags: ['BTSX', 'TypeScript', 'Native control flow']; path: '/docs/language'; note: 'src/App.btsx'; code: 'import { useState } from "octane"\n\nsetup const [count, setCount] = useState(0);\n\nbutton(onClick={() => setCount(count + 1)})\n  | Launch #{count}' } | { id: 'integration'; label: 'Integration'; number: '02'; title: 'One seamless pipeline.'; description: 'Beast turns your components into TSRX. Octane brings them to life. Choose Vite, Rspack, or Rsbuild and stay in your flow.'; tags: ['Vite', 'Rspack', 'Rsbuild']; path: '/docs/vite'; note: 'Your first edit'; code: '01  Open src/App.btsx\n02  Make it yours\n03  Save. See it live.\n\nBTSX → TSRX → Octane\n\nReady for your next idea.' } | { id: 'skills'; label: 'Skills'; number: '03'; title: 'Build with a co-pilot.'; description: 'Give your coding agent a shared language. Scaffold, create, and refine with the Beast skill, or bring an existing React experience along.'; tags: ['Scaffold', 'Create', 'Migrate']; path: '/docs/skills'; note: 'Add the Beast skill'; code: 'npx skills add https://github.com/phtn/beast-skill --skill beast' }
+    docsUrl: string
+    copyNote: (note: string) => Promise<void>
+    copyStatus: string
+  }
+
+component WorkflowPanel
+  props { activeId, active, docsUrl, copyNote, copyStatus }: WorkflowPanelProps
+  div#workflow-panel.panel-content(role="tabpanel" aria-labelledby={`tab-${activeId}`} tabIndex={0})
+    article.panel-story
+      p.eyebrow #{active.number} / #{active.label}
+      h3 #{active.title}
+      p.panel-description #{active.description}
+      ul.tags(aria-label="Features")
+        each tag in active.tags key tag
+          li #{tag}
+      a.text-link(href={`${docsUrl}${active.path}`} target="_blank" rel="noopener noreferrer") Read the guide ↗
+    div.code-window
+      div.code-heading
+        span #{active.note}
+        span.code-dots(aria-hidden="true") ● ● ●
+      pre
+        code #{active.code}
+      div.code-footer
+        if activeId === 'skills'
+          button.copy-button(type="button" onClick={() => copyNote(active.code)}) #{copyStatus}
+        else
+          span Made for humans. And their agents.
+        span.code-symbol(aria-hidden="true") ↗
+      if activeId === 'skills'
+        p.copy-feedback(role="status") #{copyStatus === 'Copied' ? 'Command copied to clipboard.' : ''}
+
+module
+  interface WorkspaceProps {
+    activeId: PanelId
+    selectPanel: (id: PanelId) => void
+    onTabKey: (event: KeyboardEvent, index: number) => void
+  }
+
+component Workspace
+  props { activeId, selectPanel, onTabKey }: WorkspaceProps
+  div.panel-tabs(role="tablist" aria-label="Product workflow")
+    each panel, index in panels key panel.id
+      button.panel-tab(
+        ~ type="button"
+        ~ id={`tab-${panel.id}`}
+        ~ role="tab"
+        ~ aria-controls="workflow-panel"
+        ~ aria-selected={activeId === panel.id}
+        ~ tabIndex={activeId === panel.id ? 0 : -1}
+        ~ onClick={() => selectPanel(panel.id)}
+        ~ onKeyDown={(event) => onTabKey(event, index)}
+        ~ )
+        span.tab-number #{panel.number}
+        | #{panel.label}
+        span.tab-arrow(aria-hidden="true") ↗
+
+props { activeId, selectPanel, onTabKey, active, docsUrl, copyNote, copyStatus }: RegistrationProps
+
+section.explorer#explore(aria-labelledby="explore-title")
+  div.section-heading
+    p.eyebrow THE STARTING POINT
+    h2#explore-title Everything you need.
+      br
+      span Nothing in your way.
+    p.section-intro From the first line to the finished experience. Find your rhythm, then make it your own.
+  div.workspace
+    Workspace(activeId={activeId} selectPanel={selectPanel} onTabKey={onTabKey})
+    WorkflowPanel(activeId={activeId} active={active} docsUrl={docsUrl} copyNote={copyNote} copyStatus={copyStatus})

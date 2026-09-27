@@ -1,0 +1,88 @@
+import { useState } from 'octane'
+import Highway from "./components/Highway.btsx";
+import { ThemeContext, revealTheme, type Theme } from "./lib/theme";
+import Button from "./components/ui/button.btsx";
+
+module
+  export type PanelId = 'language' | 'integration' | 'skills'
+  interface Props { docsUrl: string }
+  export const panels = [
+    { id: 'language', label: 'Language', number: '01', title: 'Less syntax. More intent.', description: 'A little structure goes a long way. Write typed components with indentation, native control flow, and the full expression of TypeScript.', tags: ['BTSX', 'TypeScript', 'Native control flow'], path: '/docs/language', note: 'src/App.btsx', code: 'import { useState } from "octane"\n\nsetup const [count, setCount] = useState(0);\n\nbutton(onClick={() => setCount(count + 1)})\n  | Launch #{count}' },
+    { id: 'integration', label: 'Integration', number: '02', title: 'One seamless pipeline.', description: 'Beast turns your components into TSRX. Octane brings them to life. Choose Vite, Rspack, or Rsbuild and stay in your flow.', tags: ['Vite', 'Rspack', 'Rsbuild'], path: '/docs/vite', note: 'Your first edit', code: '01  Open src/App.btsx\n02  Make it yours\n03  Save. See it live.\n\nBTSX → TSRX → Octane\n\nReady for your next idea.' },
+    { id: 'skills', label: 'Skills', number: '03', title: 'Build with a co-pilot.', description: 'Give your coding agent a shared language. Scaffold, create, and refine with the Beast skill, or bring an existing React experience along.', tags: ['Scaffold', 'Create', 'Migrate'], path: '/docs/skills', note: 'Add the Beast skill', code: 'npx skills add https://github.com/phtn/beast-skill --skill beast' }
+  ] as const
+
+component HeroLeft
+  div.hero-copy(className='gap-4 md:gap-8!')
+    p.eyebrow
+      span.status-dot(aria-hidden="true")
+      | Next Tournament
+    h1#hero-title(className='pb-8')
+      em(className='text-ink!')  Cat
+      br
+      em(className='text-ink!')  on the
+      br
+      em green.
+    // p.hero-description() December 10, 2026 &middot; Northwoods Golf Club
+    div.hero-actions(className='py-6')
+      a.primary-link(href="#explore" className='md:h-[52px] h-[42px]')
+        | Register Now
+
+props { docsUrl }: Props
+setup
+  const [theme, setTheme] = useState<Theme>("dark");
+  const themeState = { theme, setTheme };
+  const [activeId, setActiveId] = useState<PanelId>('language');
+  const [launches, setLaunches] = useState(1);
+  const [copyStatus, setCopyStatus] = useState('Copy command');
+  const active = panels.find((panel) => panel.id === activeId) ?? panels[0];
+  const copyNote = async (note: string) => {
+    try {
+      await navigator.clipboard.writeText(note);
+      setCopyStatus('Copied');
+    } catch {
+      setCopyStatus('Select the command to copy');
+    }
+  };
+  const selectPanel = (id: PanelId) => { setActiveId(id); setCopyStatus('Copy command'); };
+  const onTabKey = (event: KeyboardEvent, index: number) => {
+    const next = event.key === 'ArrowRight' ? (index + 1) % panels.length : event.key === 'ArrowLeft' ? (index + panels.length - 1) % panels.length : event.key === 'Home' ? 0 : event.key === 'End' ? panels.length - 1 : -1;
+    if (next < 0) return;
+    event.preventDefault();
+    selectPanel(panels[next].id);
+    document.getElementById(`tab-${panels[next].id}`)?.focus();
+  };
+
+
+
+ThemeContext(value={themeState})
+  div(className={`shell ${theme} bg-paper text-ink`})
+    header.site-header
+      a(className='flex items-center gap-2 text-2xl tracking-tighter' href="#" aria-label="Beast home")
+        img(src="/icon0.svg" alt="" width="30" height="30")
+        | Foreplay
+      nav.site-nav(aria-label="Main navigation")
+        a(href="#explore") Tournaments
+        a(href={docsUrl} target="_blank" rel="noopener noreferrer") My Entries
+      Button(onClick={undefined}) Sign in
+    main#main
+      section.hero(className='border border-line rounded-3xl md:min-h-[70dvh]' aria-labelledby="hero-title")
+        HeroLeft
+        div(aria-hidden="true" className={launches % 2 === 0 ? 'orbit-scene' : 'orbit-scene orbit-shift'})
+          div.orbit-grid
+
+      div.hero-bottom(className='h-36 px-[5.5%]')
+        button.vt-focus(onClick={(e) => revealTheme(themeState, e)}) #{theme}
+        button.launch-button(type="button" onClick={() => setLaunches(launches + 1)} aria-label="Launch the interactive demo")
+          span.status-dot(aria-hidden="true")
+          | #{launches === 0 ? 'System ready. Give it a spin' : `Signal received / ${String(launches).padStart(2, '0')}`}
+          span(aria-hidden="true") ↗
+        a.scroll-link(href="#explore" aria-label="Scroll to explore") ↓
+
+      // Highway
+      // Registration(activeId={activeId} selectPanel={selectPanel} onTabKey={onTabKey} active={active} docsUrl={docsUrl} copyNote={copyNote} copyStatus={copyStatus})
+
+      footer.site-footer
+        button.vt-focus(onClick={(e) => revealTheme(themeState, e)}) #{theme}
+        p foreplay.pro
+        a.brand.footer-brand(href="#" aria-label="Back to top") &copy;2026

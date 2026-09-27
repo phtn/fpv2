@@ -1,0 +1,32 @@
+{
+  "name": "fpv2",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "rsbuild dev",
+    "build": "rsbuild build",
+    "preview": "rsbuild preview",
+    "typecheck": "tsrx-tsc --noEmit",
+    "check": "bun run typecheck && bun run build"
+  },
+  "dependencies": {
+    "@octanejs/base-ui": "0.1.55",
+    "@octanejs/shadcn": "0.0.46",
+    "beast-tsrx": "0.6.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "octane": "0.6.0",
+    "tailwind-merge": "^3.7.0"
+  },
+  "devDependencies": {
+    "@beastjs/devtools": "^0.1.7",
+    "@octanejs/rsbuild-plugin": "0.1.56",
+    "@rsbuild/core": "^2.2.2",
+    "@rsbuild/plugin-tailwindcss": "^2.0.3",
+    "@tsrx/typescript-plugin": "0.3.135",
+    "@types/node": "^26.2.0",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^5.9.3"
+  }
+}
