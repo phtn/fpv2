@@ -1,0 +1,44 @@
+import Runner from './ui/runner.btsx'
+import type { Tournament } from '../data/tournament'
+
+module
+  interface Props { tournament: Tournament | null }
+
+props { tournament }: Props
+
+// The keyed content mounts when data arrives or a different tournament is selected.
+// Theme updates keep the same key, so they do not replay the text entrance.
+if tournament
+  each event in [tournament] key event.id
+    div.tournament-hero
+      section.hero(className='flex items-center justify-center overflow-visible! border-border backdrop-blue-3xl mx-[5.5%] lg:min-h-[65dvh]' aria-labelledby="hero-title")
+        div.hero-copy
+          p.eyebrow
+            span.status-dot(aria-hidden="true" className='shadow-xs')
+            span(className='text-[#ececec]!') Next Tournament
+
+          h1#hero-title
+            span.hero-title-intro #{event.titleIntro}
+            | #{' '}
+            span.hero-title-main(className='text-[#2f9e6a]!') #{event.titleMain}
+          div.hero-actions
+            Runner(label={event.registrationLabel} className='pe-2! gap-24 hover:scale-110 transition-transform duration-600 md:shadow-lg')
+              span.primary-link-icon(className='group-hover:bg-white! group-hover:text-black! relative z-20 transition-colors duration-600 delay-75 ease-in-out ' aria-hidden="true") ↗
+        div(aria-hidden="true" className='mask-b-from-50% absolute pointer-events-none orbit-scene orbit-shift')
+          div.orbit-grid
+
+      section.hero-bottom(aria-label="Tournament details")
+        dl.tournament-details
+          div.tournament-detail
+            dt Date
+            dd
+              time(dateTime={event.date}) #{event.dateLabel}
+          div.tournament-detail
+            dt Venue
+            dd #{event.venue}
+          div.tournament-detail
+            dt Tee time
+            dd(className={event.teeTime ? undefined : 'tournament-detail-pending'}) #{event.teeTime ?? 'To be announced'}
+else
+  section.hero(aria-busy="true" aria-label="Tournament")
+    p.hero-loading(role="status") Loading tournament details…

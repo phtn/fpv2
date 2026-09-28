@@ -132,6 +132,70 @@
   }
 }
 
+/* Hero content enters on mount, including after asynchronous data arrives.
+ * Backwards fill leaves no persistent transform that could affect the theme snapshot. */
+.tournament-hero {
+  --hero-enter-duration: 480ms;
+  --hero-title-delay: 140ms;
+  --hero-action-delay: 200ms;
+  --details-enter-delay: calc(var(--hero-enter-duration) + var(--hero-title-delay));
+  --details-stagger: 40ms;
+}
+.hero-copy .eyebrow,
+.hero-title-intro,
+.hero-title-main,
+.hero-actions {
+  animation: vt-rise-in var(--hero-enter-duration) var(--vt-ease) backwards;
+}
+.hero-title-intro {
+  animation-delay: 90ms;
+}
+.hero-title-main {
+  animation-delay: var(--hero-title-delay);
+}
+.hero-actions {
+  animation-delay: var(--hero-action-delay);
+}
+.tournament-hero .hero-bottom {
+  /* Reveal at the end of the title. Only the text fades, avoiding compounded
+   * parent/child opacity that makes the stagger feel slow and uneven. */
+  animation: hero-details-visible 1ms step-end backwards;
+  animation-delay: var(--details-enter-delay);
+}
+.tournament-hero .tournament-detail {
+  --detail-index: 0;
+}
+.tournament-hero .tournament-detail > dt,
+.tournament-hero .tournament-detail > dd {
+  --detail-part-index: 0;
+  animation: hero-detail-in 360ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  animation-delay: calc(var(--details-enter-delay) + (var(--detail-index) * 2 + var(--detail-part-index)) * var(--details-stagger));
+}
+.tournament-hero .tournament-detail > dd {
+  --detail-part-index: 1;
+}
+.tournament-hero .tournament-detail:nth-child(2) {
+  --detail-index: 1;
+}
+.tournament-hero .tournament-detail:nth-child(3) {
+  --detail-index: 2;
+}
+
+@keyframes hero-details-visible {
+  from { visibility: hidden; }
+  to { visibility: visible; }
+}
+@keyframes hero-detail-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* 4 · glide — shared underline & layout morphs */
 ::view-transition-group(*.glide) {
   animation-duration: 380ms;
@@ -979,20 +1043,12 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-
   *,
   *::before,
   *::after {
-    transition-duration: 0.01ms !important;
-  }
-
-  .rotator > span,
-  .demo-in-forward,
-  .demo-in-backward {
-    animation: none;
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
   }
 
   .rotator > span:first-child {
@@ -1006,14 +1062,4 @@
     animation-duration: 0.01ms !important;
     animation-delay: 0ms !important;
   }
-}
-
-body {
-  -ms-overflow-style: none; /* Edge, Internet Explorer */
-  scrollbar-width: none; /* Firefox */
-  overflow-y: scroll;
-}
-
-::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Opera */
 }

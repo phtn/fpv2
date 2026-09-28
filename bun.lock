@@ -14,7 +14,7 @@
         "tailwind-merge": "^3.7.0",
       },
       "devDependencies": {
-        "@beastjs/devtools": "^0.1.7",
+        "@beastjs/devtools": "^0.1.8",
         "@octanejs/rsbuild-plugin": "0.1.56",
         "@rsbuild/core": "^2.2.2",
         "@rsbuild/plugin-tailwindcss": "^2.0.3",
@@ -28,7 +28,7 @@
   "packages": {
     "@alloc/quick-lru": ["@alloc/quick-lru@5.3.0", "", {}, "sha512-U4+70Pc5ZS9osnCBCE5Jha/ciHM+Yp+CNMNC/7HvYbNRk1Ldd+f7qO65W5qfhu/TCv+/ozljlXXe9Nj8419DMA=="],
 
-    "@beastjs/devtools": ["@beastjs/devtools@0.1.7", "", { "peerDependencies": { "@rsbuild/core": "^2.0.0", "@rspack/core": "^2.0.0", "beast-tsrx": "^0.4.3", "octane": "^0.4.3", "typescript": ">=5.0.0", "vite": "^8.0.16" }, "optionalPeers": ["@rsbuild/core", "@rspack/core", "typescript", "vite"] }, "sha512-VqssCNQu80+p+wBgB293tKjavm5G0rpTUURXmhWJcbbPkL/Y4QgWg1wSUIPz1260qygTwc6nQmjZdYUpTfP9rQ=="],
+    "@beastjs/devtools": ["@beastjs/devtools@0.1.8", "", { "peerDependencies": { "@rsbuild/core": "^2.0.0", "@rspack/core": "^2.0.0", "beast-tsrx": "^0.4.3", "octane": "^0.4.3", "typescript": ">=5.0.0", "vite": "^8.0.16" }, "optionalPeers": ["@rsbuild/core", "@rspack/core", "typescript", "vite"] }, "sha512-jBObUfLRdQ/EBIG7lpy5EfXc4SqgzxeotsvzbQjYJutmI4LQ0snqfzURcrixkXjYy59n13l0q399KyB7qekbvg=="],
 
     "@emnapi/core": ["@emnapi/core@1.11.3", "", { "dependencies": { "@emnapi/wasi-threads": "1.2.3", "tslib": "^2.4.0" } }, "sha512-zLpS5asjEb7lq8jYLq37N6XKaE41DIexlY1rF/z4/tIl3wo13Sqm28fRyfIsKZD+NZ8mM5RoKkpW/rBcuoSZSg=="],
 
